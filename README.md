@@ -8,4 +8,4 @@ A little about me:
 - I am taking STATS 220 because the R programming looks interesting and STATS101 was cool. 
 - I am interested in learning about how R can help future programming projects. 
 
-A meme that captures how I currently feel about my university studies is ![]([https://c.tenor.com/8druEACXtX8AAAAd/tenor.gif](https://tenor.com/nLVT9nw31bW.gif))
+A meme that captures how I currently feel about my university studies is ![](https://c.tenor.com/8druEACXtX8AAAAd/tenor.gif)
