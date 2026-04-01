@@ -1,0 +1,117 @@
+---
+title: My dynamic report
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+library(tidyverse)
+
+# Get data CSV.
+logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSL0IeyuhpuskDlBwhwDbYsKlbYBPwC4SDxyx1AGTT4z1EzWX0KnIjXHtaQ7s6FsVbNO_xCJoPs9Z7e/pub?output=csv")
+
+# Rename columns from question to name format.
+latest_data <- logged_data |>
+  rename(
+    acs = 2,
+    role = 3,
+    outcome = 4,
+    kills = 5,
+    deaths = 6
+    
+  )
+
+
+# Average kills, get csv, get kills, average results and round to 1 dp.
+mean_kills <- latest_data$kills |>
+  mean() |>
+  round(1)
+
+# Average deaths, get csv, get deaths, average results and round to 1 dp.
+mean_deaths <- latest_data$deaths |>
+  mean() |>
+  round(1)
+
+# Max kills, get csv, get kills, find largest value.
+max_kills <- latest_data$kills |>
+  max()
+
+# Bar graph of average ACS by role.
+acs_graph <- latest_data |>
+  # create ggplot.
+  ggplot(aes(x = role, y = acs, fill = role)) +
+  # Average results and plot them for a bar graph.
+  stat_summary(fun = "mean", geom = "bar") +
+  # Add nice title, subtitle and label sides.
+  labs(
+    title = "Average ACS by Role",
+    subtitle = "Comparing average ACS scores to role played in the match",
+    caption = "Game: Valorant",
+    x = "Role Played",
+    y = "Average Combat Score")
+
+# Bar graph of deaths by outcome.
+death_graph <- latest_data |>
+  # Create ggplot.
+  ggplot(aes(x = outcome, y = mean_deaths, fill = outcome)) +
+  # Add columns, which have already calculated values.
+  geom_col() +
+  # Add nice title, subtitle and label sides.
+  labs (
+    title = "Average deaths in Wins vs. Losses",
+    subtitle = "Comparing average deaths with the match result",
+    caption = "Game: Valorant",
+    x = "Game Outcome",
+    y = "Average Deaths"
+  )
+
+```
+
+```{css}
+
+body{
+  background-color: #1f2326;
+  color: white;
+  font-family: 'Segoe UI';
+}
+
+h2 {
+  color: #ff4655;
+  text-align: center;
+}
+
+p {
+  font-weight: bold;
+}
+
+```
+
+## Dynamic Valorant Match Stasticics 
+
+Valorant match statistics are the greatest indicator of performance and prediction for future matches. Climbing the ranks is harder than ever, let's explore how different roles impact ACS and how important staying alive in a round is for winning matches.
+
+
+## How does ACS differ by role?
+
+```{r}
+acs_graph
+```
+
+This graph demonstrates the massive difference in average ACS performance amongst the different roles in Valorant (Controller, Duelist, Initiator and Sentinel). If you're looking to boost your ACS in your matches, consider changing roles to the role which is out-preforming the others.
+
+## How does deaths compare to match outcome?
+
+```{r}
+death_graph
+```
+
+This graph demonstrates how your deaths relate to the match outcome. Are you dying too much in your games? Is playing to live more worthwhile than taking unnecessary risk? Furthermore, consider the following stats:
+
+Average kills per match: `r paste(mean_kills)`.
+Average deaths per match: `r paste(mean_deaths)`.
+
+Those numbers are the overall average for each respective variable. Are you preforming above the average (hopefully in kills)?
+
+Well done to the anonymous user who has the most kills with: `r paste(max_kills)` kills!
+
+
